@@ -25,7 +25,6 @@ public class RetrieveTransactionController {
 	
 	@PostMapping("/retrieve-transaction-user")
 	public ResponseEntity<?> searchTransactions(@RequestBody OptionsRequest request) {
-		List<Transaction> data = new LinkedList<>();
 		List<TreatedTransaction> transactions = new LinkedList<>();
 		Map<String, List<TreatedTransaction>> respuesta = new HashMap<String, List<TreatedTransaction>>();
 		if(request.validateFields()) {
@@ -36,8 +35,8 @@ public class RetrieveTransactionController {
 					request.getBranchId().length()));
 			optionsRequestBuild.setTransactionDateStart(request.getTransactionDateStart());
 			optionsRequestBuild.setTransactionDateEnd(request.getTransactionDateEnd());
-			data = searchservice.getResponse(optionsRequestBuild);
-			data.stream().forEach((Transaction transaction)->{
+			List<Transaction> data = searchservice.getResponse(optionsRequestBuild);
+			data.forEach((Transaction transaction)->{
 				transactions.add(new TreatedTransaction(transaction.getTransactionDescription().getTransactionType(), transaction.getTransactionDescription().getDescripcion(), transaction.getDate(), transaction.getTransactionDescription().getAmount()));
 			});
 			respuesta.put("transactions", transactions);
